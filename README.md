@@ -1,4 +1,4 @@
-# gobete - Go backend for any web application
+# gobete - Go Backend Template
 
 This is the backend API for any web application, built using Go language and the Fiber web framework. It provides RESTful endpoints.
 
