@@ -1,6 +1,6 @@
-# gobete - Go Backend Template
+# gobete (Go Backend Template)
 
-This is the backend API for any web application, built using Go language and the Fiber web framework. It provides RESTful endpoints.
+Gobete is a boilerplate backend API built with Go (Golang) and the Fiber web framework. It provides a solid foundation for building RESTful APIs with features like user authentication, database integration, and more.
 
 ## Features
 
