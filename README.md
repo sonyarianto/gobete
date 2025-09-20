@@ -22,7 +22,7 @@ Hi! gobete is short for "Go backend template". It is a boilerplate backend API b
 - Support deployment in various environments, including local, staging, and production.
 - Unit and integration testing to ensure code quality and reliability.
 
-## Getting Started
+## Getting started
 
 To get started with the gobete API, follow these steps:
 
@@ -50,7 +50,7 @@ To get started with the gobete API, follow these steps:
    ```
 6. The API will be available at `http://localhost:9000` (or the port you specified in the `.env` file).
 
-## Hot Reload during Development
+## Hot reload during development
 For development, you can use `air` for hot reloading. Install it using:
 ```bash
 go install github.com/air-verse/air@latest
@@ -60,7 +60,8 @@ Then run:
 air
 ```
 
-## Before Commit
+## Before commit
+- Run `go vet` to catch any potential issues.
 - Ensure all tests are passing.
 - Update documentation as needed.
 - Run `go fmt` to format the code.
