@@ -20,20 +20,6 @@ import (
 var validate = validator.New(validator.WithRequiredStructEnabled())
 var jwtSecret = []byte(os.Getenv("JWT_SECRET"))
 
-// func init() {
-// 	validate.RegisterValidation("password", func(fl validator.FieldLevel) bool {
-// 		password := fl.Field().String()
-// 		if len(password) < 8 {
-// 			return false
-// 		}
-// 		hasUpper := regexp.MustCompile(`[A-Z]`).MatchString(password)
-// 		hasNumber := regexp.MustCompile(`[0-9]`).MatchString(password)
-// 		// Improved symbol regex: matches any non-alphanumeric character
-// 		hasSymbol := regexp.MustCompile(`[^a-zA-Z0-9]`).MatchString(password)
-// 		return hasUpper && hasNumber && hasSymbol
-// 	})
-// }
-
 func CreateUserHandler(c *fiber.Ctx) error {
 	var req CreateUserRequest
 
