@@ -1,23 +1,38 @@
 package user
 
 import (
-	"github.com/sonyarianto/gobete/internal/systems/db"
-	"github.com/sonyarianto/gobete/internal/systems/response"
-
-	"os"
-	"strconv"
-	"time"
-
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
+	"github.com/sonyarianto/gobete/internal/systems/db"
+	"github.com/sonyarianto/gobete/internal/systems/response"
+	"github.com/sonyarianto/gobete/internal/systems/utility"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
+
+	"os"
+	"strconv"
+	"strings"
+	"time"
 )
 
-var validate = validator.New()
+var validate = validator.New(validator.WithRequiredStructEnabled())
 var jwtSecret = []byte(os.Getenv("JWT_SECRET"))
+
+// func init() {
+// 	validate.RegisterValidation("password", func(fl validator.FieldLevel) bool {
+// 		password := fl.Field().String()
+// 		if len(password) < 8 {
+// 			return false
+// 		}
+// 		hasUpper := regexp.MustCompile(`[A-Z]`).MatchString(password)
+// 		hasNumber := regexp.MustCompile(`[0-9]`).MatchString(password)
+// 		// Improved symbol regex: matches any non-alphanumeric character
+// 		hasSymbol := regexp.MustCompile(`[^a-zA-Z0-9]`).MatchString(password)
+// 		return hasUpper && hasNumber && hasSymbol
+// 	})
+// }
 
 func CreateUserHandler(c *fiber.Ctx) error {
 	var req CreateUserRequest
@@ -28,11 +43,16 @@ func CreateUserHandler(c *fiber.Ctx) error {
 
 	// Validate input
 	if err := validate.Struct(&req); err != nil {
-		// Collect validation errors in a map
+		// Collect validation errors in a map with detailed info
 		if validationErrors, ok := err.(validator.ValidationErrors); ok {
-			errors := make(map[string]string)
+			errors := make(map[string]map[string]string)
 			for _, fieldErr := range validationErrors {
-				errors[fieldErr.Field()] = fieldErr.Error()
+				fieldName := strings.ToLower(fieldErr.Field())
+				errors[fieldName] = map[string]string{
+					"tag":     fieldErr.Tag(),
+					"param":   fieldErr.Param(),
+					"message": fieldErr.Error(),
+				}
 			}
 			return response.SendErrorResponse(c, fiber.StatusBadRequest, "validation_error", errors)
 		}
@@ -98,15 +118,21 @@ func LoginUserHandler(c *fiber.Ctx) error {
 
 	// Validate input
 	if err := validate.Struct(&req); err != nil {
-		// Collect validation errors in a map
 		if validationErrors, ok := err.(validator.ValidationErrors); ok {
-			errors := make(map[string]string)
+			errors := make(map[string][]map[string]any)
 			for _, fieldErr := range validationErrors {
-				errors[fieldErr.Field()] = fieldErr.Error()
+				// field := strings.ToLower(fieldErr.Field()) // Normalize to lowercase JSON field names
+				jsonField := utility.GetJSONFieldName(req, fieldErr.Field())
+				errorObj := map[string]any{
+					"rule":    fieldErr.Tag(),
+					"param":   fieldErr.Param(),
+					"message": ValidationLoginMessage(jsonField, fieldErr.Tag(), fieldErr.Param()),
+				}
+				errors[jsonField] = append(errors[jsonField], errorObj)
 			}
 			return response.SendErrorResponse(c, fiber.StatusBadRequest, "validation_error", errors)
 		}
-		// Fallback for other errors
+
 		return response.SendErrorResponse(c, fiber.StatusBadRequest, "validation_error", err.Error())
 	}
 

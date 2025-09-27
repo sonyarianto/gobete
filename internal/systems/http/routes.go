@@ -1,16 +1,15 @@
 package http
 
 import (
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/limiter"
 	"github.com/sonyarianto/gobete/internal/modules/home"
 	"github.com/sonyarianto/gobete/internal/modules/user"
 	"github.com/sonyarianto/gobete/internal/systems/http/middleware"
 
 	"os"
 	"time"
-
-	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/cors"
-	"github.com/gofiber/fiber/v2/middleware/limiter"
 )
 
 func RegisterRoutes(app *fiber.App) {
