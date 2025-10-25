@@ -1,12 +1,12 @@
 # gobete
 
-Hi! gobete is short for "Go backend template". It is a boilerplate backend API built with Go (Golang) and the Fiber web framework. It provides a solid foundation for building RESTful APIs with features like user authentication, database integration, and more.
+Hi! gobete is short for "Go backend template". It is a boilerplate backend API built with Go and the Fiber web framework. It provides a solid foundation for building RESTful APIs with features like user authentication, database integration, and more.
 
 ## Features
 
 - User authentication and management.
 - Connection to MySQL database. Using GORM as the ORM layer.
-- Easy to understand and extend, as long as you follow the existing structure and understand Golang and Fiber basics. Everything starts from `main.go`. The `internal` directory contains the core application logic, organized into subdirectories for different modules and functionalities.
+- Easy to understand and extend, as long as you follow the existing structure and understand Go and Fiber basics. Everything starts from `main.go`. The `internal` directory contains the core application logic, organized into subdirectories for different modules and functionalities.
 - Environment configuration using `.env` file.
 
 ## Goals
@@ -60,12 +60,15 @@ Then run:
 air
 ```
 
-## Before commit
-- Run `go vet` to catch any potential issues.
-- Ensure all tests are passing.
-- Update documentation as needed.
-- Run `go fmt` to format the code.
-- Check for any TODOs or FIXMEs in the code.
+## Some planned features and TODOs
+- Add unit and integration tests.
+- Implement more advanced features like role-based access control.
+- Audit logging and monitoring.
+- Better documentation and examples.
+- Docker support for easier deployment.
+
+## Contributing
+Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
 
 ## Author
 - Sony AK - [sony@sony-ak.com](https://sony-ak.com)
