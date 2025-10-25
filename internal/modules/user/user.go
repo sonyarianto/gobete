@@ -23,9 +23,7 @@ var jwtSecret = []byte(os.Getenv("JWT_SECRET"))
 func CreateUserHandler(c *fiber.Ctx) error {
 	var req CreateUserRequest
 
-	if err := c.BodyParser(&req); err != nil {
-		return response.SendErrorResponse(c, fiber.StatusBadRequest, "invalid_payload")
-	}
+	req = *c.Locals("body").(*CreateUserRequest)
 
 	// Validate input
 	if err := validate.Struct(&req); err != nil {
@@ -97,10 +95,7 @@ func CreateUserHandler(c *fiber.Ctx) error {
 func LoginUserHandler(c *fiber.Ctx) error {
 	var req LoginRequest
 
-	// Parse JSON body into struct
-	if err := c.BodyParser(&req); err != nil {
-		return response.SendErrorResponse(c, fiber.StatusBadRequest, "invalid_payload")
-	}
+	req = *c.Locals("body").(*LoginRequest)
 
 	// Validate input
 	if err := validate.Struct(&req); err != nil {

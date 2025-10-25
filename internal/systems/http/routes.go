@@ -48,8 +48,8 @@ func RegisterRoutes(app *fiber.App) {
 func RegisterAPIV1Routes(api fiber.Router) {
 	// Public routes
 	api.Get("/", home.HomeHandler)
-	api.Post("/login", user.LoginUserHandler)
-	api.Post("/users", user.CreateUserHandler)
+	api.Post("/login", middleware.BodyParser(&user.LoginRequest{}), user.LoginUserHandler)
+	api.Post("/users", middleware.BodyParser(&user.CreateUserRequest{}), user.CreateUserHandler)
 	api.Post("/refresh", user.RefreshTokenHandler)
 
 	// Protected user routes

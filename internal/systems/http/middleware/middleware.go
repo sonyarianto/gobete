@@ -102,3 +102,15 @@ func isValidUserSession(claims jwt.MapClaims) bool {
 
 	return sessionCount > 0
 }
+
+func BodyParser(model any) fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		// Create a new instance of the model type
+		req := model
+		if err := c.BodyParser(req); err != nil {
+			return response.SendErrorResponse(c, fiber.StatusBadRequest, "invalid_payload")
+		}
+		c.Locals("body", req)
+		return c.Next()
+	}
+}
