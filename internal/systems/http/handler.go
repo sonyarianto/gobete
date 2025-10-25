@@ -12,5 +12,5 @@ func NotFoundHandler(c *fiber.Ctx) error {
 }
 
 func HealthCheckHandler(c *fiber.Ctx) error {
-	return response.SendSuccessResponse(c, "API status healthy", fiber.Map{"status": "healthy"})
+	return response.SendSuccessResponse(c, "API is healthy", fiber.Map{"status": "healthy"})
 }

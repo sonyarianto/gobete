@@ -9,7 +9,7 @@ import (
 )
 
 func HomeHandler(c *fiber.Ctx) error {
-	return response.SendSuccessResponse(c, "API is running.", fiber.Map{
+	return response.SendSuccessResponse(c, "API is running", fiber.Map{
 		"version": os.Getenv("APP_VERSION"),
 	})
 }
