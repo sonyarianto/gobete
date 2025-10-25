@@ -23,7 +23,7 @@ var jwtSecret = []byte(os.Getenv("JWT_SECRET"))
 func CreateUserHandler(c *fiber.Ctx) error {
 	var req CreateUserRequest
 
-	req = *c.Locals("body").(*CreateUserRequest)
+	req = *c.Locals("body").(*CreateUserRequest) // Get parsed body from context, after middleware parsing
 
 	// Validate input
 	if err := validate.Struct(&req); err != nil {
@@ -95,7 +95,7 @@ func CreateUserHandler(c *fiber.Ctx) error {
 func LoginUserHandler(c *fiber.Ctx) error {
 	var req LoginRequest
 
-	req = *c.Locals("body").(*LoginRequest)
+	req = *c.Locals("body").(*LoginRequest) // Get parsed body from context, after middleware parsing
 
 	// Validate input
 	if err := validate.Struct(&req); err != nil {
