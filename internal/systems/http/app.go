@@ -16,6 +16,6 @@ func NewApp() *fiber.App {
 
 	// 404 handler
 	app.Use(NotFoundHandler)
-	
+
 	return app
 }
