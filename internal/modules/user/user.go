@@ -13,7 +13,6 @@ import (
 
 	"os"
 	"strconv"
-	"strings"
 	"time"
 )
 
@@ -27,20 +26,10 @@ func CreateUserHandler(c *fiber.Ctx) error {
 
 	// Validate input
 	if err := validate.Struct(&req); err != nil {
-		// Collect validation errors in a map with detailed info
 		if validationErrors, ok := err.(validator.ValidationErrors); ok {
-			errors := make(map[string]map[string]string)
-			for _, fieldErr := range validationErrors {
-				fieldName := strings.ToLower(fieldErr.Field())
-				errors[fieldName] = map[string]string{
-					"tag":     fieldErr.Tag(),
-					"param":   fieldErr.Param(),
-					"message": fieldErr.Error(),
-				}
-			}
+			errors := utility.FormatValidationErrors(req, validationErrors)
 			return response.SendErrorResponse(c, fiber.StatusBadRequest, "validation_error", errors)
 		}
-		// Fallback for other errors
 		return response.SendErrorResponse(c, fiber.StatusBadRequest, "validation_error", err.Error())
 	}
 
@@ -100,20 +89,9 @@ func LoginUserHandler(c *fiber.Ctx) error {
 	// Validate input
 	if err := validate.Struct(&req); err != nil {
 		if validationErrors, ok := err.(validator.ValidationErrors); ok {
-			errors := make(map[string][]map[string]any)
-			for _, fieldErr := range validationErrors {
-				// field := strings.ToLower(fieldErr.Field()) // Normalize to lowercase JSON field names
-				jsonField := utility.GetJSONFieldName(req, fieldErr.Field())
-				errorObj := map[string]any{
-					"rule":    fieldErr.Tag(),
-					"param":   fieldErr.Param(),
-					"message": ValidationLoginMessage(jsonField, fieldErr.Tag(), fieldErr.Param()),
-				}
-				errors[jsonField] = append(errors[jsonField], errorObj)
-			}
+			errors := utility.FormatValidationErrors(req, validationErrors)
 			return response.SendErrorResponse(c, fiber.StatusBadRequest, "validation_error", errors)
 		}
-
 		return response.SendErrorResponse(c, fiber.StatusBadRequest, "validation_error", err.Error())
 	}
 
