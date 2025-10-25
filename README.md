@@ -5,7 +5,7 @@ Hi! gobete is short for "Go backend template". It is a boilerplate backend API b
 ## Features
 
 - User authentication and management.
-- Connection to MySQL database. Using GORM as the ORM.
+- Connection to MySQL database. Using GORM as the ORM layer.
 - Easy to understand and extend, as long as you follow the existing structure and understand Golang and Fiber basics. Everything starts from `main.go`. The `internal` directory contains the core application logic, organized into subdirectories for different modules and functionalities.
 - Environment configuration using `.env` file.
 
