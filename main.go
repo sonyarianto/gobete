@@ -11,16 +11,6 @@ import (
 	"github.com/sonyarianto/gobete/internal/systems/http"
 )
 
-// @title gobete API
-// @version 1.0
-// @description API for any web application, using Go Fiber framework and MySQL database.
-// @termsOfService https://sony-ak.com
-// @contact.name Sony AK
-// @contact.email sony@sony-ak.com
-// @license.name MIT
-// @license.url http://opensource.org/licenses/MIT
-// @host localhost:9000
-// @BasePath /
 func main() {
 	// Load environment variables from .env file
 	err := godotenv.Load()
