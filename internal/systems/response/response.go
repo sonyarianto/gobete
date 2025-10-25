@@ -5,13 +5,6 @@ import (
 	errpkg "github.com/sonyarianto/gobete/internal/systems/error"
 )
 
-// Success response
-type SuccessResponse struct {
-	Success bool   `json:"success"`
-	Message string `json:"message"`
-	Data    any    `json:"data"`
-}
-
 // Error response
 type ErrorResponse struct {
 	Code    string `json:"code"`
