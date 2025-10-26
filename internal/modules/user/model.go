@@ -14,10 +14,12 @@ type User struct {
 }
 
 type UserDetail struct {
-	gorm.Model        // Includes ID, CreatedAt, UpdatedAt, DeletedAt
-	UserID     uint   `gorm:"uniqueIndex"` // Ensure one-to-one relationship
-	FirstName  string `json:"first_name" validate:"required"`
-	LastName   string `json:"last_name" validate:"required"`
+	ID        uint   `gorm:"primaryKey"`
+	UserID    uint   `gorm:"uniqueIndex"` // Ensure one-to-one relationship
+	FirstName string `json:"first_name" validate:"required"`
+	LastName  string `json:"last_name" validate:"required"`
+	CreatedAt time.Time
+	UpdatedAt time.Time
 	// Add more fields as needed
 }
 
