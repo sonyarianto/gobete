@@ -16,6 +16,24 @@ import (
 	"time"
 )
 
+// GenerateAccessToken creates a JWT token with the given parameters.
+func GenerateAccessToken(userID uint, email string, secret []byte, expireMinutes int) (string, *jwt.Token, error) {
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"user_id": userID,
+		"email":   email,
+		"exp":     time.Now().Add(time.Duration(expireMinutes) * time.Minute).Unix(),
+		"iat":     time.Now().Unix(),
+		"jti":     uuid.NewString(),
+	})
+
+	signedString, err := token.SignedString(secret)
+	if err != nil {
+		return "", nil, err
+	}
+
+	return signedString, token, nil
+}
+
 func LoginUserHandler(c *fiber.Ctx) error {
 	var req LoginRequest
 
@@ -64,16 +82,8 @@ func LoginUserHandler(c *fiber.Ctx) error {
 		}
 	}
 
-	// Generate access token (short-lived)
-	accessToken := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"user_id": user.ID,
-		"email":   user.Email,
-		"exp":     time.Now().Add(time.Duration(accessTokenExpire) * time.Minute).Unix(),
-		"iat":     time.Now().Unix(),
-		"jti":     uuid.NewString(), // Unique identifier for the token
-	})
-
-	accessTokenString, err := accessToken.SignedString(jwtSecret)
+	// Generate JWT access token (short-lived)
+	accessTokenString, _, err := GenerateAccessToken(user.ID, user.Email, jwtSecret, accessTokenExpire)
 	if err != nil {
 		return response.SendErrorResponse(c, fiber.StatusInternalServerError, "internal_error", "Failed to generate access token")
 	}
@@ -89,16 +99,11 @@ func LoginUserHandler(c *fiber.Ctx) error {
 		}
 	}
 
-	// Generate refresh token (long-lived)
-	refreshToken := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"user_id": user.ID,
-		"email":   user.Email,
-		"exp":     time.Now().Add(time.Duration(refreshTokenExpire) * 24 * time.Hour).Unix(),
-		"iat":     time.Now().Unix(),
-		"jti":     uuid.NewString(), // Unique identifier for the token
-	})
+	// Convert days to minutes for token expiry
+	refreshTokenExpireMinutes := refreshTokenExpire * 24 * 60
 
-	refreshTokenString, err := refreshToken.SignedString(jwtSecret)
+	// Generate JWT refresh token (long-lived)
+	refreshTokenString, refreshToken, err := GenerateAccessToken(user.ID, user.Email, jwtSecret, refreshTokenExpireMinutes)
 	if err != nil {
 		return response.SendErrorResponse(c, fiber.StatusInternalServerError, "internal_error", "Failed to generate refresh token")
 	}
